@@ -1,5 +1,8 @@
 const chalk = require("chalk");
 
+const isDev = () => process.env.NODE_ENV === "development";
+const isProd = () => process.env.NODE_ENV === "production";
+
 const logMessage = (message, type = "info") => {
   let color =
     type === "error"
@@ -14,4 +17,4 @@ const logMessage = (message, type = "info") => {
   );
 };
 
-module.exports = { logMessage };
+module.exports = { logMessage, isDev, isProd };

@@ -12,7 +12,8 @@ const statsFile = resolve(
 
 const renderer = (req, res, next) => {
   try {
-    Promise.all(res.locals.serverPromises)
+    let dataRequirements = res.locals.serverPromises;
+    dataRequirements
       .then(() => {
         const initialProps = {
           routerContext: {},
@@ -34,7 +35,6 @@ const renderer = (req, res, next) => {
         const styleTags = extractor.getStyleTags();
 
         const state = serialize(res.locals.store.getState());
-
         const html = ServerBootstrap.toHtmlString({
           jsx,
           scriptTags,

@@ -1,7 +1,14 @@
 const { DefinePlugin } = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
+const { isDev, isProd } = require("./utils");
 
-const sharedPlugins = [];
+const sharedPlugins = [
+  new MiniCssExtractPlugin({
+    filename: isDev() ? "[name].css" : "[name].[contenthash].css",
+    chunkFilename: isDev() ? "[id].css" : "[id].[contenthash].css",
+  }),
+];
 
 const clientPlugins = [
   new DefinePlugin({

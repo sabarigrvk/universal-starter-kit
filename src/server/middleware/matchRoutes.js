@@ -1,39 +1,44 @@
 import { matchPath } from "react-router-dom";
 import Routes from "shared/Routes";
 
+export const getDisplayName = (WrappedComponent) => {
+  return (
+    (WrappedComponent &&
+      (WrappedComponent.displayName || WrappedComponent.name)) ||
+    "Component"
+  );
+};
+
 export default (req, res, next) => {
   const store = res.locals.store;
-  const matches = Routes.map((route) => {
-    const match = matchPath(req.path, route.path, route);
-    // We then look for static getInitialData function on each top level component
-    const { component } = route;
-    if (match) {
-      if (!match.isExact && route.exact) {
-        return null;
-      }
 
-      const obj = {
-        route,
-        match,
-        promise: component.load
-          ? component
-              .load()
-              .then(() =>
-                component.getInitialData
-                  ? component.getInitialData(store)
-                  : Promise.resolve(null)
-              )
-          : component.getInitialData
-          ? component.getInitialData(store)
-          : Promise.resolve(null),
-      };
-      return obj;
+  const getInitialData = (comp) => {
+    if (comp.getInitialData) {
+      res.locals.serverPromises = comp.getInitialData(store);
+      next();
     }
     return null;
+  };
+
+  const { component: loadableComponent } = Routes.find((route) => {
+    return matchPath(req.path, route);
   });
 
-  const promises = matches.map((match) => (match ? match.promise : null));
-
-  res.locals.serverPromises = promises;
-  next();
+  // if async loadable component
+  if (loadableComponent.load) {
+    loadableComponent.load().then((comp) => {
+      console.log(
+        "this is a lazy loaded component",
+        getDisplayName(comp.default || comp)
+      );
+      getInitialData(comp.default || comp);
+    });
+  } else {
+    // if normal component
+    console.log(
+      "this is a normal loaded component",
+      getDisplayName(loadableComponent)
+    );
+    getInitialData(loadableComponent);
+  }
 };

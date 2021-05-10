@@ -28,6 +28,7 @@ const config = (api) => {
     plugins: [
       // TODO : check if this plugin is needed
       "@loadable/babel-plugin",
+      "@babel/plugin-proposal-class-properties",
       [
         "@babel/plugin-transform-runtime",
         {

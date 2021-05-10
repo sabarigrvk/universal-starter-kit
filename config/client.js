@@ -3,7 +3,7 @@ const { HotModuleReplacementPlugin } = require("webpack");
 const { merge } = require("webpack-merge");
 const { paths } = require("./paths");
 const { clientLoaders } = require("./loaders");
-const { clientPlugins } = require("./plugins");
+const { clientPlugins, sharedPlugins } = require("./plugins");
 
 const baseConfig = {
   name: "client",
@@ -18,7 +18,7 @@ const baseConfig = {
   module: {
     rules: clientLoaders,
   },
-  plugins: [...clientPlugins],
+  plugins: [...sharedPlugins, ...clientPlugins],
   stats: {
     assets: true,
   },

@@ -15,12 +15,6 @@ const config = () => {
       warnings: false,
     },
   };
-  // console.log([
-  //   merge(baseConfig, require("./client")[mode]),
-  //   merge(baseConfig, require("./server")[mode]),
-  // ]);
-
-  // console.log(merge(baseConfig, require("./client")[mode].entry));
 
   return [
     merge(baseConfig, require("./config/client")[mode]),

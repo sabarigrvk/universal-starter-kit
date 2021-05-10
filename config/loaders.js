@@ -1,4 +1,78 @@
-const { paths } = require("./paths");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { isDev, isProd } = require("./utils");
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
+const postcssOptions = {
+  loader: require.resolve("postcss-loader"),
+  options: {
+    sourceMap: isDev(),
+  },
+};
+const cssModuleOptions = {
+  exportLocalsConvention: "camelCase",
+  localIdentName: isDev()
+    ? "[name]-[local]-[hash:base64:5]"
+    : "[hash:base64:8]",
+};
+
+const cssLoaderClient = {
+  test: cssRegex,
+  exclude: cssModuleRegex,
+  sideEffects: true,
+  use: [
+    isProd() ? MiniCssExtractPlugin.loader : "style-loader",
+    {
+      loader: require.resolve("css-loader"),
+      options: {
+        sourceMap: isDev(),
+        importLoaders: 1,
+      },
+    },
+    postcssOptions,
+  ],
+};
+
+const cssLoaderServer = {
+  test: cssRegex,
+  exclude: cssModuleRegex,
+  use: [MiniCssExtractPlugin.loader, require.resolve("css-loader")],
+};
+
+const cssModuleLoaderClient = {
+  test: cssModuleRegex,
+  use: [
+    isProd() ? MiniCssExtractPlugin.loader : "style-loader",
+    {
+      loader: require.resolve("css-loader"),
+      options: {
+        modules: cssModuleOptions,
+        importLoaders: 1,
+        sourceMap: isDev(),
+      },
+    },
+    postcssOptions,
+  ],
+};
+
+const cssModuleLoaderServer = {
+  test: cssModuleRegex,
+  use: [
+    {
+      loader: require.resolve("css-loader"),
+      options: {
+        modules: {
+          ...cssModuleOptions,
+          // useful for ssr: https://github.com/webpack-contrib/css-loader#exportonlylocals
+          exportOnlyLocals: true,
+        },
+        importLoaders: 1,
+        sourceMap: true,
+      },
+    },
+    postcssOptions,
+  ],
+};
+
 const scriptsLoader = {
   oneOf: [
     {
@@ -24,13 +98,13 @@ const scriptsLoader = {
 
 const clientLoaders = [
   {
-    oneOf: [scriptsLoader],
+    oneOf: [cssLoaderClient, scriptsLoader],
   },
 ];
 
 const serverLoaders = [
   {
-    oneOf: [scriptsLoader],
+    oneOf: [cssLoaderServer, scriptsLoader],
   },
 ];
 

@@ -2,7 +2,7 @@ const { merge } = require("webpack-merge");
 const { HotModuleReplacementPlugin } = require("webpack");
 const { paths } = require("./paths");
 const { serverLoaders } = require("./loaders");
-const { serverPlugins } = require("./plugins");
+const { serverPlugins, sharedPlugins } = require("./plugins");
 const baseConfig = {
   name: "server",
   target: "node",
@@ -20,7 +20,7 @@ const baseConfig = {
   module: {
     rules: serverLoaders,
   },
-  plugins: [...serverPlugins],
+  plugins: [...sharedPlugins, ...serverPlugins],
 };
 
 module.exports = {
