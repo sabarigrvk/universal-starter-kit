@@ -1,6 +1,6 @@
 import React from "react";
 import { join, resolve } from "path";
-import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
+import { ChunkExtractor } from "@loadable/server";
 import serialize from "serialize-javascript";
 import { paths } from "../../../config/paths";
 import { ServerBootstrap } from "../components";

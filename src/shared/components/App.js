@@ -6,7 +6,7 @@ import "./app.css";
 function App() {
   return (
     <Fragment>
-      <Link to="/">Home</Link>
+      <Link to="/">Home alone</Link>
       <Link to="/about">About</Link>
       <Switch>
         {routes.map((route, i) => {

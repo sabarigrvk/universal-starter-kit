@@ -7,9 +7,7 @@
   "license": "ISC",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
-    "dev:build": "cross-env NODE_ENV=development webpack --watch",
-    "dev:serve": "nodemon --watch build --exec \"node ./build/server/server.js\"",
-    "start": "concurrently -p \"[{name}]\" -n \"BUILD, SERVE\" \"npm:dev*\"",
+    "start": "cross-env NODE_ENV=development babel-node ./scripts/start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

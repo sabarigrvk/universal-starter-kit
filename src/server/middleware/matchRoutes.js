@@ -12,33 +12,22 @@ export const getDisplayName = (WrappedComponent) => {
 export default (req, res, next) => {
   const store = res.locals.store;
 
-  const getInitialData = (comp) => {
-    if (comp.getInitialData) {
-      res.locals.serverPromises = comp.getInitialData(store);
-      next();
-    }
-    return null;
-  };
-
   const { component: loadableComponent } = Routes.find((route) => {
     return matchPath(req.path, route);
   });
 
   // if async loadable component
   if (loadableComponent.load) {
-    loadableComponent.load().then((comp) => {
-      console.log(
-        "this is a lazy loaded component",
-        getDisplayName(comp.default || comp)
-      );
-      getInitialData(comp.default || comp);
+    loadableComponent.load().then(({ default: comp }) => {
+      res.locals.serverPromises = comp.getInitialData
+        ? comp.getInitialData(store)
+        : Promise.resolve(null);
+      next();
     });
   } else {
-    // if normal component
-    console.log(
-      "this is a normal loaded component",
-      getDisplayName(loadableComponent)
-    );
-    getInitialData(loadableComponent);
+    res.locals.serverPromises = loadableComponent.getInitialData
+      ? loadableComponent.getInitialData(store)
+      : Promise.resolve(null);
+    next();
   }
 };
