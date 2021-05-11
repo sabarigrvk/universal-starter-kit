@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "cross-env NODE_ENV=production babel-node ./scripts/build.js",
     "start": "cross-env NODE_ENV=development babel-node ./scripts/start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -41,6 +41,7 @@
     "css-loader": "^5.2.4",
     "cssnano": "^5.0.2",
     "history": "^4.10.1",
+    "html-webpack-plugin": "^5.3.1",
     "mini-css-extract-plugin": "^1.6.0",
     "nodemon": "^2.0.7",
     "postcss-import": "^14.0.1",
@@ -55,7 +56,8 @@
     "webpack-hot-middleware": "^2.25.0",
     "webpack-hot-server-middleware": "^0.6.1",
     "webpack-merge": "^5.7.3",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "webpackbar": "*"
   },
   "browserslist": {
     "production": [

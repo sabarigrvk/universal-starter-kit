@@ -18,10 +18,7 @@ const baseConfig = {
   module: {
     rules: clientLoaders,
   },
-  plugins: [...sharedPlugins, ...clientPlugins],
-  stats: {
-    assets: true,
-  },
+  plugins: [...sharedPlugins("client"), ...clientPlugins],
 };
 
 module.exports = {

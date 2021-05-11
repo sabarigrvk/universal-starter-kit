@@ -86,7 +86,9 @@ const scriptsLoader = {
       use: {
         loader: require.resolve("babel-loader"),
         options: {
-          cacheDirectory: false,
+          cacheDirectory: true,
+          compact: isProd(),
+          cacheCompression: false,
           babelrc: false,
           envName: process.env.NODE_ENV,
           ignore: ["node_modules", "build"],

@@ -20,7 +20,7 @@ const baseConfig = {
   module: {
     rules: serverLoaders,
   },
-  plugins: [...sharedPlugins, ...serverPlugins],
+  plugins: [...sharedPlugins("server"), ...serverPlugins],
 };
 
 module.exports = {

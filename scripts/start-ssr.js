@@ -8,6 +8,7 @@ import { getWebpackPort, getCompiler, getCompilerPromise } from "./utils";
 import { paths } from "../config/paths";
 
 const startSSR = async () => {
+  console.clear();
   const WEBPACK_PORT = getWebpackPort();
   const DEVSERVER_HOST = process.env.DEVSERVER_HOST || "http://localhost";
   const [clientConfig, serverConfig] = getConfig();
@@ -48,7 +49,13 @@ const startSSR = async () => {
       serverSideRender: true,
       // writeToDisk is used in favor of WriteFileWebpackPlugin
       // https://github.com/jacob-ebey/webpack-5-ssr-example/blob/e974509636ecd32a74fedb042a5a44033d21fc50/server/middleware/index.js#L40
-      writeToDisk: true,
+      writeToDisk(filePath) {
+        return (
+          /server/.test(filePath) ||
+          /stats\.json/.test(filePath) ||
+          /\.css/.test(filePath)
+        );
+      },
       stats: clientConfig.stats,
     })
   );

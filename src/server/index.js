@@ -15,7 +15,7 @@ app.use(renderer);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  logMessage(`App listening on port ${PORT}`);
+  logMessage(`App listening on port ${PORT}`, "info");
 });
 
 export default app;

@@ -5,11 +5,12 @@ const rootDir = realpathSync(process.cwd());
 const resolveApp = (relativePath) => resolve(rootDir, relativePath);
 
 const paths = {
-  HTML_TEMPLATE: resolveApp("config/webpack/template.html"),
+  HTML_TEMPLATE: resolveApp("public/index.html"),
   CLIENT_BUILD_DIR: resolveApp("build/client"),
   SERVER_BUILD_DIR: resolveApp("build/server"),
   DOTENV: resolveApp(".env"),
   SRC_DIR: resolveApp("src"),
+  BUILD_DIR: resolveApp("build"),
   CLIENT_SRC_DIR: resolveApp("src/client"),
   SERVER_SRC_DIR: resolveApp("src/server"),
   CONFIG_DIR: resolveApp("config"),

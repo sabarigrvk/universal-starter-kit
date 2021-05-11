@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { fetchUsers } from "store/users/actions";
 function About(props) {
   useEffect(() => {
-    props.fetchUsers();
+    if (!props.users.length) {
+      props.fetchUsers();
+    }
   }, []);
   return (
     <>
