@@ -4,21 +4,16 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackBar = require("webpackbar");
 const LoadablePlugin = require("@loadable/webpack-plugin");
-const { isDev, isProd } = require("./utils");
+const { isProd } = require("./utils");
 const { paths } = require("./paths");
 
-const sharedPlugins = (target) => [
-  isProd &&
+const sharedPlugins = [
+  isProd() &&
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
-      chunkFilename: "[id].[contenthash].css",
+      chunkFilename: "[name].[contenthash].css",
     }),
-  new WebpackBar({
-    name: target,
-    profile: true,
-    color: target === "client" ? "blue" : "yellow",
-  }),
-];
+].filter(Boolean);
 
 const clientPlugins = [
   new DefinePlugin({

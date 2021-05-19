@@ -1,8 +1,11 @@
 import loadable from "@loadable/component";
 
-const HomePage = loadable(() => import("components/pages/Home"));
-const AboutPage = loadable(() => import("components/pages/About"));
-// import AboutPage from "components/pages/About";
+const HomePage = loadable(() =>
+  import(/* webpackChunkName: "home" */ "components/pages/Home")
+);
+const AboutPage = loadable(() =>
+  import(/* webpackChunkName: "about" */ "components/pages/About")
+);
 const routes = [
   {
     path: "/",

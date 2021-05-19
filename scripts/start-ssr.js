@@ -1,14 +1,21 @@
+import rimraf from "rimraf";
 import express from "express";
+import nodemon from "nodemon";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
-import nodemon from "nodemon";
-import { logMessage } from "../config/utils";
 import getConfig from "../webpack.config";
-import { getWebpackPort, getCompiler, getCompilerPromise } from "./utils";
 import { paths } from "../config/paths";
+import {
+  getWebpackPort,
+  getCompiler,
+  getCompilerPromise,
+  logCompiler,
+  logMessage,
+} from "./utils";
 
 const startSSR = async () => {
   console.clear();
+  rimraf.sync(paths.BUILD_DIR);
   const WEBPACK_PORT = getWebpackPort();
   const DEVSERVER_HOST = process.env.DEVSERVER_HOST || "http://localhost";
   const [clientConfig, serverConfig] = getConfig();
@@ -30,15 +37,16 @@ const startSSR = async () => {
     clientConfig,
     serverConfig
   );
+
   const clientPromise = getCompilerPromise("client", clientCompiler);
   const serverPromise = getCompilerPromise("server", serverCompiler);
 
   // starts client webpack compiler in hmr mode
-  const app = express();
   const watchOptions = {
     ignored: /node_modules/,
     stats: clientConfig.stats,
   };
+  const app = express();
   app.use((_req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     return next();
@@ -64,9 +72,7 @@ const startSSR = async () => {
   app.listen(WEBPACK_PORT);
 
   // starts server in watch mode
-
   serverCompiler.watch(watchOptions, (error, stats) => {
-    logMessage("servercompiler watching");
     if (!error && !stats.hasErrors()) {
       console.log(stats.toString(serverConfig.stats));
       return;
@@ -84,16 +90,17 @@ const startSSR = async () => {
   });
 
   try {
+    // wait for the compiler to execute before calling nodemon script
     await serverPromise;
     await clientPromise;
   } catch (error) {
     logMessage(error, "error");
   }
 
-  // start node server using nodemon script and watch for changes in server scriptF
+  // start node server using nodemon script and watch for changes in server script
   const script = nodemon({
     script: `${paths.SERVER_BUILD_DIR}/server.js`,
-    ignore: ["src", "scripts", "config", "./*.*", "build/client"],
+    ignore: ["src", "scripts", "config", "./*.*", "build"],
     delay: 200,
   });
 

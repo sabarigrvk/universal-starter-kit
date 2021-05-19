@@ -20,7 +20,7 @@ const cssLoaderClient = {
   exclude: cssModuleRegex,
   sideEffects: true,
   use: [
-    isProd() ? MiniCssExtractPlugin.loader : "style-loader",
+    isDev() ? "style-loader" : MiniCssExtractPlugin.loader,
     {
       loader: require.resolve("css-loader"),
       options: {
@@ -35,13 +35,24 @@ const cssLoaderClient = {
 const cssLoaderServer = {
   test: cssRegex,
   exclude: cssModuleRegex,
-  use: [MiniCssExtractPlugin.loader, require.resolve("css-loader")],
+  sideEffects: true,
+  use: [
+    {
+      loader: require.resolve("css-loader"),
+      options: {
+        sourceMap: isDev(),
+        importLoaders: 1,
+      },
+    },
+    postcssOptions,
+  ],
 };
 
 const cssModuleLoaderClient = {
   test: cssModuleRegex,
+  sideEffects: true,
   use: [
-    isProd() ? MiniCssExtractPlugin.loader : "style-loader",
+    isDev() ? "style-loader" : MiniCssExtractPlugin.loader,
     {
       loader: require.resolve("css-loader"),
       options: {
@@ -56,6 +67,7 @@ const cssModuleLoaderClient = {
 
 const cssModuleLoaderServer = {
   test: cssModuleRegex,
+  sideEffects: true,
   use: [
     {
       loader: require.resolve("css-loader"),
@@ -100,13 +112,13 @@ const scriptsLoader = {
 
 const clientLoaders = [
   {
-    oneOf: [cssLoaderClient, scriptsLoader],
+    oneOf: [cssLoaderClient, cssModuleLoaderClient, scriptsLoader],
   },
 ];
 
 const serverLoaders = [
   {
-    oneOf: [cssLoaderServer, scriptsLoader],
+    oneOf: [cssLoaderServer, cssModuleLoaderServer, scriptsLoader],
   },
 ];
 

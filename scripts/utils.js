@@ -1,15 +1,20 @@
 import webpack from "webpack";
 import chalk from "chalk";
 
-export const logMessage = (message, type = "info") => {
-  let color = "blue";
-  switch (color) {
+export const logMessage = (message, type) => {
+  let color = "white";
+  switch (type) {
+    case "info":
+      color = "cyanBright";
+      break;
     case "error":
-      color = "red";
+      color = "redBright";
       break;
     case "warning":
-      color = "yellow";
+      color = "yellowBright";
       break;
+    default:
+      color = "white";
   }
   console.log(`[${new Date().toISOString()}]`, chalk[color](message));
 };
@@ -46,6 +51,23 @@ export const getCompiler = (clientConfig, serverConfig = {}) => {
     (compiler) => compiler.name === "server"
   );
   return [clientCompiler, serverCompiler];
+};
+
+export const logCompiler = (error, stats) => {
+  if (!error && !stats.hasErrors()) {
+    console.log(stats.toString(stats));
+    return;
+  }
+
+  if (error) {
+    logMessage(error, "error");
+  }
+
+  if (stats.hasErrors()) {
+    const info = stats.toJson();
+    const errors = info.errors[0].details;
+    logMessage(errors, "error");
+  }
 };
 
 export const clientOnly = () => process.argv.includes("--client-only");

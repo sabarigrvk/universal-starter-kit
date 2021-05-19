@@ -1,5 +1,6 @@
 const { merge } = require("webpack-merge");
 const { HotModuleReplacementPlugin } = require("webpack");
+const nodeExternals = require("webpack-node-externals");
 const { paths } = require("./paths");
 const { serverLoaders } = require("./loaders");
 const { serverPlugins, sharedPlugins } = require("./plugins");
@@ -13,6 +14,7 @@ const baseConfig = {
       paths.SERVER_SRC_DIR,
     ],
   },
+  externals: [nodeExternals()],
   output: {
     path: paths.SERVER_BUILD_DIR,
     libraryTarget: "commonjs2",
@@ -20,7 +22,7 @@ const baseConfig = {
   module: {
     rules: serverLoaders,
   },
-  plugins: [...sharedPlugins("server"), ...serverPlugins],
+  plugins: [...sharedPlugins, ...serverPlugins],
 };
 
 module.exports = {

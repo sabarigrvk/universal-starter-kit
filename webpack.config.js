@@ -10,7 +10,7 @@ const config = () => {
     resolve: {
       ...resolvers,
     },
-    stats: "errors-only",
+    stats: "errors-warnings",
   };
 
   return [

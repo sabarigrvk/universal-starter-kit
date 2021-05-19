@@ -9,7 +9,7 @@ function About(props) {
   }, []);
   return (
     <>
-      <h1>Users List</h1>
+      <h1>Users List 1</h1>
       {props.users.map((user) => {
         return <li key={user.id}>{user.name}</li>;
       })}

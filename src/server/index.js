@@ -1,6 +1,5 @@
 import { join } from "path";
 import express from "express";
-import { logMessage } from "config/utils";
 import { paths } from "config/paths";
 import { createStore, errorHandler, renderer, matchRoutes } from "./middleware";
 const { CLIENT_BUILD_DIR, PUBLIC_DIR } = paths;
@@ -15,7 +14,7 @@ app.use(renderer);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  logMessage(`App listening on port ${PORT}`, "info");
+  console.log(`App listening on port ${PORT}`);
 });
 
 export default app;

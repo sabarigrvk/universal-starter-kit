@@ -18,7 +18,7 @@ const baseConfig = {
   module: {
     rules: clientLoaders,
   },
-  plugins: [...sharedPlugins("client"), ...clientPlugins],
+  plugins: [...sharedPlugins, ...clientPlugins],
 };
 
 module.exports = {
