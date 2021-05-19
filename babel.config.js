@@ -14,7 +14,7 @@ const config = (api) => {
       [
         "@babel/env",
         {
-          // TODO : configure usebuiltins
+          // https://babeljs.io/docs/en/babel-preset-env#include
           useBuiltIns: web ? "entry" : undefined,
           corejs: web ? "core-js@3" : false,
           targets: !web ? { node: "current" } : undefined,
@@ -27,6 +27,7 @@ const config = (api) => {
     ],
     plugins: [
       "@loadable/babel-plugin",
+      "@babel/plugin-proposal-class-properties",
       [
         "@babel/plugin-transform-runtime",
         {

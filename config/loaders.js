@@ -91,6 +91,9 @@ const scriptsLoader = {
       test: /\.mjs$/,
       include: /node_modules/,
       type: "javascript/auto",
+      resolve: {
+        fullySpecified: false,
+      },
     },
     {
       test: /\.(js|jsx|mjs)$/,

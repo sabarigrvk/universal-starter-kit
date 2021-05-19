@@ -33,6 +33,11 @@ const resolvers = {
     components: resolve(paths.SRC_DIR, "shared/components"),
     store: resolve(paths.SRC_DIR, "shared/store"),
   },
+  fallback: {
+    crypto: false,
+    fs: false,
+    path: false,
+  },
 };
 
 module.exports = { paths, resolvers };
